@@ -28,7 +28,7 @@ public:
   void activateOTA_bin();
   void deactivateOTA_bin();
   void updateData();
-  bool isActive();  // Para saber si está en modo OTA
+  bool isActive();
 
 private:
   void principalPage();
