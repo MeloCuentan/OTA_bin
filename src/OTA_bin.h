@@ -30,6 +30,12 @@ public:
   void updateData();
   bool isActive();
 
+  // MODIFICACION: monta la pagina de subida y el updater sobre un servidor web
+  // YA EXISTENTE, sin crear ningun AP ni cambiar de red. pagePath es la ruta de
+  // la pagina con el formulario (la subida se hace al POST /update interno).
+  // Compatible con ESP8266 (ESP8266WebServer) y ESP32 (WebServer).
+  void attachToServer(OTA_WEB_SERVER *srv, const char *pagePath = "/ota");
+
 private:
   void principalPage();
 
