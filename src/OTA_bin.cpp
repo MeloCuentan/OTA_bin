@@ -1,5 +1,11 @@
 #include "OTA_bin.h"
 
+// Macros con prefijo OTA_BIN_ (OTA_BIN_RESET / OTA_BIN_CHIP_MODEL). Se incluyen
+// AQUI, y no en la cabecera, para que los nombres genericos que usaban antes
+// (RESET, CHIP_MODEL) no colisionen con los miembros RESET de FastLED en los
+// demas modulos que incluyen OTA_bin.h. Ver OTA_bin_macros.h.
+#include "OTA_bin_macros.h"
+
 // Pagina bonita usada por attachToServer() cuando se monta sobre un servidor
 // existente (mismo estilo oscuro que el resto de la configuracion). Se declara
 // fuera de los #ifdef porque la usan tanto el ESP8266 como el ESP32.
@@ -89,7 +95,7 @@ void OTA_bin::activateOTA_bin() {
 void OTA_bin::principalPage() {
   server.on("/", [this]() {
     server.send(200, "text/html",
-                String("<h1>OTA - ") + CHIP_MODEL +
+                String("<h1>OTA - ") + OTA_BIN_CHIP_MODEL +
                 "</h1><p><a href='/update'>Actualizar firmware</a></p>");
   });
 
@@ -109,7 +115,7 @@ void OTA_bin::principalPage() {
       server.send(200, "text/plain",
                   (Update.hasError()) ? F("Fallo en la actualización") : F("Actualización exitosa. Reiniciando..."));
       delay(1000);
-      RESET;
+      OTA_BIN_RESET();
     },
     []() {
       HTTPUpload& upload = server.upload();
