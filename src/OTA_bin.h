@@ -10,17 +10,27 @@
   #include <DNSServer.h>
   extern ESP8266WebServer server;
   extern ESP8266HTTPUpdateServer httpUpdater;
-  #define RESET ESP.restart()
-  #define CHIP_MODEL F("ESP8266")
+  // Tipo de servidor y de updater segun la plataforma (los usa attachToServer)
+  #define OTA_WEB_SERVER ESP8266WebServer
 #elif defined(ESP32)
   #include <WiFi.h>
   #include <WebServer.h>
   #include <Update.h>
+  #include <HTTPUpdateServer.h>
   #include <DNSServer.h>
+  #include <esp_system.h>
   extern WebServer server;
-  #define RESET esp_restart()
-  #define CHIP_MODEL ESP.getChipModel()
+  extern HTTPUpdateServer httpUpdater;
+  #define OTA_WEB_SERVER WebServer
 #endif
+
+// OJO: aqui NO se definen macros RESET ni CHIP_MODEL.
+//
+// Definirlas en esta cabecera rompia la compilacion: FastLED tiene miembros y
+// enumerados llamados RESET (TIMING::RESET en timing_traits.h / led_timing.h)
+// y el preprocesador los sustituia por "ESP.restart()" al incluir OTA_bin.h
+// antes que FastLED.h. Las versiones con prefijo OTA_BIN_ viven en
+// OTA_bin_macros.h y solo las usa OTA_bin.cpp.
 
 class OTA_bin {
 public:
